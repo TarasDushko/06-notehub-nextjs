@@ -1,16 +1,18 @@
 // app/notes/[id]/page.tsx
 import { fetchNoteById } from "@/lib/api";
-import { dehydrate, QueryClient } from "@tanstack/react-query";
+import { QueryClient, dehydrate } from "@tanstack/react-query";
 import NoteDetailsClient from "./NoteDetails.client";
 
 interface NotePageProps {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }
 
 const NoteDetails = async ({ params }: NotePageProps) => {
-  const { id } = await params;
+  const { id } = params;
+
   const queryClient = new QueryClient();
 
+  // Завантажуємо нотатку на сервері
   await queryClient.prefetchQuery({
     queryKey: ["note", id],
     queryFn: () => fetchNoteById(id),

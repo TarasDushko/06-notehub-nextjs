@@ -13,7 +13,11 @@ import Loader from "../loading";
 
 import css from "./Notes.page.module.css";
 
-export default function NotesClient() {
+interface NotesClientProps {
+  initialData: FetchNotesResponse;
+}
+
+export default function NotesClient({ initialData }: NotesClientProps) {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [debouncedSearch] = useDebounce(search, 500);
@@ -22,7 +26,7 @@ export default function NotesClient() {
   const { data, isFetching, isError, error } = useQuery<FetchNotesResponse>({
     queryKey: ["notes", debouncedSearch, page],
     queryFn: () => fetchNotes(debouncedSearch, page),
-    placeholderData: (prev) => prev,
+    initialData,
   });
 
   const handleSearchChange = (value: string) => {

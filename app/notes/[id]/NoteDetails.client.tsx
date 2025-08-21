@@ -1,58 +1,25 @@
-"use client";
-
-import { DehydratedState, useQuery } from "@tanstack/react-query";
-import { HydrationBoundary } from "@tanstack/react-query";
 import { fetchNoteById } from "@/lib/api";
+import { QueryClient, dehydrate } from "@tanstack/react-query";
+import NoteDetailsClient from "./NoteDetails.client";
 
-import css from "./NoteDetails.page.module.css";
-import Loader from "@/app/loading";
-
-interface NoteDetailsClientProps {
-  noteId: string;
-  dehydratedState: DehydratedState;
+interface NotePageProps {
+  params: { id: string };
 }
 
-export default function NoteDetailsClient({
-  noteId,
-  dehydratedState,
-}: NoteDetailsClientProps) {
-  return (
-    <HydrationBoundary state={dehydratedState}>
-      <NoteContent noteId={noteId} />
-    </HydrationBoundary>
-  );
-}
+const NoteDetails = async ({ params }: NotePageProps) => {
+  const { id } = params;
 
-function NoteContent({ noteId }: { noteId: string }) {
-  const {
-    data: note,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["note", noteId],
-    queryFn: () => fetchNoteById(noteId),
-    refetchOnMount: false,
+  const queryClient = new QueryClient();
+
+  // Завантажуємо нотатку на сервері
+  await queryClient.prefetchQuery({
+    queryKey: ["note", id],
+    queryFn: () => fetchNoteById(id),
   });
 
-  if (isLoading) {
-    return <Loader />;
-  }
-
-  if (error || !note) {
-    return <p>Something went wrong.</p>;
-  }
-
   return (
-    <div className={css.container}>
-      <div className={css.item}>
-        <div className={css.header}>
-          <h2>{note.title}</h2>
-        </div>
-        <p className={css.content}>{note.content}</p>
-        <p className={css.date}>
-          {new Date(note.createdAt).toLocaleDateString()}
-        </p>
-      </div>
-    </div>
+    <NoteDetailsClient noteId={id} dehydratedState={dehydrate(queryClient)} />
   );
-}
+};
+
+export default NoteDetails;
