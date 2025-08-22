@@ -10,7 +10,7 @@ import Loader from "@/app/loading";
 
 import css from "./NoteDetails.page.module.css";
 
-// Типи props
+// Props клієнтського компонента
 interface NoteDetailsClientProps {
   noteId: string;
   dehydratedState?: DehydratedState;
@@ -29,7 +29,6 @@ export default function NoteDetailsClient({
   dehydratedState,
 }: NoteDetailsClientProps) {
   return (
-    // Передаємо серверний стан React Query, якщо він є
     <HydrationBoundary state={dehydratedState}>
       <NoteContent noteId={noteId} />
     </HydrationBoundary>

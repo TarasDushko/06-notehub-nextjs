@@ -6,21 +6,14 @@ import {
 } from "@tanstack/react-query";
 import NoteDetailsClient from "./NoteDetails.client";
 
-// Типізація props для Next.js 15+
-interface NotePageParams {
-  id: string;
-}
-
-interface NotePageProps {
-  params: Awaited<NotePageParams>;
-}
-
-export default async function NoteDetails({ params }: NotePageProps) {
-  const { id } = params;
+// Серверний компонент
+export default async function NoteDetails(props: unknown) {
+  // props.params — це фактично Promise<{ id: string }>
+  const { id } = await (props as { params: Promise<{ id: string }> }).params;
 
   const queryClient = new QueryClient();
 
-  // Серверне завантаження даних через React Query
+  // Серверне завантаження даних
   await queryClient.prefetchQuery({
     queryKey: ["note", id],
     queryFn: () => fetchNoteById(id),
