@@ -6,11 +6,13 @@ import {
 } from "@tanstack/react-query";
 import NoteDetailsClient from "./NoteDetails.client";
 
-interface PageProps {
+// Оголошуємо правильний тип для props
+interface NotePageProps {
   params: { id: string };
+  searchParams?: { [key: string]: string | string[] | undefined };
 }
 
-export default async function NoteDetails({ params }: PageProps) {
+export default async function NoteDetails({ params }: NotePageProps) {
   const { id } = params;
 
   const queryClient = new QueryClient();
