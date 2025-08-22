@@ -6,17 +6,16 @@ import {
 } from "@tanstack/react-query";
 import NoteDetailsClient from "./NoteDetails.client";
 
-interface NotePageProps {
-  params: {
-    id: string;
-  };
+interface PageProps {
+  params: { id: string };
 }
 
-export default async function NoteDetails({ params }: NotePageProps) {
+export default async function NoteDetails({ params }: PageProps) {
   const { id } = params;
 
   const queryClient = new QueryClient();
 
+  // Серверне завантаження даних через React Query
   await queryClient.prefetchQuery({
     queryKey: ["note", id],
     queryFn: () => fetchNoteById(id),
