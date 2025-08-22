@@ -7,7 +7,9 @@ import {
 import NoteDetailsClient from "./NoteDetails.client";
 
 interface NotePageProps {
-  params: { id: string };
+  params: {
+    id: string;
+  };
 }
 
 export default async function NoteDetails({ params }: NotePageProps) {
