@@ -6,10 +6,13 @@ import {
 } from "@tanstack/react-query";
 import NoteDetailsClient from "./NoteDetails.client";
 
-// Оголошуємо правильний тип для props
+// Типізація props для Next.js 15+
+interface NotePageParams {
+  id: string;
+}
+
 interface NotePageProps {
-  params: { id: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
+  params: Awaited<NotePageParams>;
 }
 
 export default async function NoteDetails({ params }: NotePageProps) {
