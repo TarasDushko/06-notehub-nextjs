@@ -9,7 +9,7 @@ import Loader from "@/app/loading";
 
 interface NoteDetailsClientProps {
   noteId: string;
-  dehydratedState: DehydratedState;
+  dehydratedState?: DehydratedState;
 }
 
 export default function NoteDetailsClient({
